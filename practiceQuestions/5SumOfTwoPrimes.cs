@@ -4,6 +4,7 @@ namespace AssignmentSolutions
 {
     internal class SumOfTwoPrimes
     {
+         //Implement a program that finds whether a number can be expressed as the sum of two prime numbers. (e.g. 34 = 3+ 31) 
         static void Main(string[] args)
         {
             Console.Write("Enter a number: ");

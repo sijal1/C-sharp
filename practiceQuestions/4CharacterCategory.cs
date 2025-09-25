@@ -4,6 +4,10 @@ namespace AssignmentSolutions
 {
     internal class CharacterCategory
     {
+        
+
+        //Write a program that categorizes an input character as an Uppercase letter, Lowercase letter, Digit,
+        //or Special Character, and continues until the user chooses to exit.
         static void Main(string[] args)
         {
             string userChoice; 
