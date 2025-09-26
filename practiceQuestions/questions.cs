@@ -2,13 +2,14 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
+using System.Security.Cryptography;
 using System.Xml.Schema;
 
 
 namespace AssignmentSolutions
 {
-public static class questions
-{
+    public static class questions
+    {
 
         public static void Question1_TriangleType()
         //Write a program to accept 3 sides of a triangle and check if the triangle is Equilateral, Isosceles, or Scalene
@@ -16,9 +17,9 @@ public static class questions
             //int x, y, z;
             Console.WriteLine("Enter triangle sizes  ");
             Console.Write(" X : ");
-            bool b1 = int.TryParse(Console.ReadLine(),out int x);
+            bool b1 = int.TryParse(Console.ReadLine(), out int x);
             Console.Write(" Y : ");
-            bool b2 = int.TryParse(Console.ReadLine(), out int y); 
+            bool b2 = int.TryParse(Console.ReadLine(), out int y);
             Console.Write(" Z : ");
             bool b3 = int.TryParse(Console.ReadLine(), out int z);
 
@@ -32,12 +33,12 @@ public static class questions
                 {
                     Console.WriteLine("Isosceles Triangle ");
                 }
-                else 
+                else
                 {
                     Console.WriteLine("Scalene Triangle ");
                 }
             }
-            else 
+            else
             {
                 Console.WriteLine(" invalid inputs  ");
             }
@@ -49,16 +50,16 @@ public static class questions
         {
             Console.Write(" enter your number  : ");
             int num = int.Parse(Console.ReadLine());
-            
+
             int len = num.ToString().Length;
 
             int sum = 0;
 
             string num_str = num.ToString();
 
-            foreach(char i in num_str) 
+            foreach (char i in num_str)
             {
-              
+
                 // Convert.ToInt32(i);  // this converts to ascii value
                 int digit = int.Parse(i.ToString()); // Convert char to actual digit
 
@@ -66,11 +67,11 @@ public static class questions
                 sum += Convert.ToInt32(Math.Pow(digit, len));
             }
 
-            if ( sum == num)
+            if (sum == num)
             {
                 Console.WriteLine(" {0} is an armstrong numebr ", num);
             }
-            else 
+            else
             {
                 Console.WriteLine("not an armstrong number");
             }
@@ -84,9 +85,9 @@ public static class questions
             int[] array = new int[n];
 
             Console.WriteLine(" Enter Array Elements :  ");
-            for (int i = 0; i < n; i++) 
+            for (int i = 0; i < n; i++)
             {
-                array[i] = int.Parse(Console.ReadLine()); 
+                array[i] = int.Parse(Console.ReadLine());
             }
 
             Console.WriteLine(" Array Elements :  ");
@@ -135,7 +136,7 @@ public static class questions
 
         public static void Question4_whichCharacter()
         {
-            string userChoice; 
+            string userChoice;
             do
             {
                 Console.WriteLine("enter your input : ");
@@ -161,9 +162,9 @@ public static class questions
                 {
                     Console.WriteLine(" your character is  space");
                 }
-                else 
+                else
                 {
-                    Console.WriteLine("{0} is a special charcter" ,ch);
+                    Console.WriteLine("{0} is a special charcter", ch);
                 }
 
 
@@ -176,7 +177,7 @@ public static class questions
 
             }
             while (userChoice != "NO");
-        
+
 
 
 
@@ -184,10 +185,193 @@ public static class questions
 
         //Implement a program that finds whether a number can be expressed as the sum of two prime numbers. (e.g. 34 = 3+ 31) 
         public static void Question5_NumAsSumofTwoPrimeNum()
-        { 
-        
+        {
+            Console.WriteLine("Enter your number ");
+            int num;
+            bool b1 = Int32.TryParse(Console.ReadLine(), out num);
+
+            if (!b1 || num < 2)
+            {
+                Console.WriteLine("Invalid input. Please enter a number greater than 1");
+                return;
+            }
+            //step 1 : primes upto num
+            int primeCount = 0;
+            for (int i = 2; i <= num; i++)
+            {
+                bool isPrime = true;
+                for (int j = 2; j * j <= i; j++)
+                {
+                    if (i % j == 0)
+                    {
+                        isPrime = false;
+                        break;
+                    }
+                }
+                if (isPrime)
+                {
+                    primeCount++;
+                }
+            }
+            // step2 primes in array 
+            int[] primes = new int[primeCount]; //list would reduce code
+            int index = 0;
+            for (int i = 2; i <= num; i++)
+            {
+                bool isPrime = true;
+                for (int j = 2; j * j <= i; j++)
+                {
+                    if (i % j == 0)
+                    {
+                        isPrime = false;
+                        break;
+                    }
+                }
+                if (isPrime)
+                {
+                    primes[index++] = i;
+                }
+            }
+            //step 3 ; prime pairs
+            bool found = false;
+            for (int i = 0; i < primes.Length; i++)
+            {
+                int p = primes[i];         // Take one prime number
+                int complement = num - p;  // Find what number would complete the sum to 'num'
+                for (int j = 0; j < primes.Length; j++)
+                {
+                    if (primes[j] == complement && p <= complement) //This inner loop checks if complement is also in the list of prime numbers.
+                    {
+                        Console.WriteLine($"{num} = {p} + {complement}");
+                        found = true;
+                        break;
+                        //If yes, then both p and complement are prime - valid pair
+                        // p <= complement avoids printing the same pair twice(e.g., 3 + 31 and 31 + 3).
+                    }
+                }
+            }
+            if (!found)
+            {
+                Console.WriteLine($"{num} cannot be expressed as the sum of two prime numbers.");
+            }
+        }
+        public static void Question6_LoginSystem()
+        //6.Write a program that simulates a basic login system with maximum 3 attempts using conditional statements.
+        {
+            string userName = "admin";
+            string password = "admin#1221";
+            int loginAttempts = 0;
+            bool loggedin = false;
+            do
+            {
+                Console.WriteLine("Enter Username : ");
+                string inputUsername = Console.ReadLine();
+                Console.WriteLine("Enter Password : ");
+                string inputPassword = Console.ReadLine();
+
+                loginAttempts++;
+                if (inputUsername == userName && inputPassword == password)
+                {
+                    Console.WriteLine("Logged in ");
+                    loggedin = true;
+                    break;
+                }
+                Console.WriteLine("Wrong Credentials , please try again ");
+            }
+            while (!loggedin && loginAttempts < 3);
+            if (!loggedin)
+            {
+                Console.WriteLine("Exceeded attemts , try again later ");
+            }
+        }
+
+        public static void Question7_GuessRandom()
+        // 7.Write a program that continues until the user correctly guesses a number and display the total number of attempts taken(between 1 - 100).
+        {
+            Random random = new Random();
+            int num = random.Next(0, 101);
+            int userInput;
+            int count = 0;
+
+            do
+            {
+                Console.WriteLine("guess the number : ");
+                userInput = Convert.ToInt32(Console.ReadLine());
+                count++;
+
+
+            }
+            while (userInput != num);
+
+            if (userInput == num)
+            {
+                Console.WriteLine("You Took {0} attempts for the random number {1}", count, num);
+
+            }
+
+
+        }
+
+        // 8.Write a program to print all prime numbers between 1 and 500.
+        public static void Question8_PrimeNumber500()
+        {
+
+
+            for (int i = 2; i < 500; i++)
+            {
+                bool isPrime = true;
+                for (int j = 2; j <= Math.Sqrt(i); j++)
+                {
+                    if (i % j == 0)
+                    {
+                        isPrime = false;
+                        break;
+                    }
+                }
+                if (isPrime)
+                {
+                    Console.Write(i + " ");
+                }
+            }
+        }
+        // Implement a program to check if a given number is a perfect number(sum of divisors = number, e.g., 28).
+        public static void Question9_PerfectNumber() 
+        {
+            Console.Write("Enter number to check for Perfect Number : ");
+            int num;
+            bool inputValid = int.TryParse(Console.ReadLine(), out num);
+            int sum = 0;
+            if (inputValid)
+            {
+                for (int i = 1; i < num; i++)
+                {
+                    if (num % i == 0) 
+                    {
+                        sum += i;
+                    }
+                }
+
+                if (sum == num)
+                {
+                    Console.WriteLine("{0} is an perfect number ",num);
+                }
+                else
+                {
+                    Console.WriteLine("{0} is an NOT a perfect number ",num);
+                }
+            }
+            else 
+            {
+                Console.WriteLine(" invalid input ; enter valid number  ");
+            }
+        }
+
+        //  Write a program to print all numbers that are both palindromes and prime numbers within a range. (take range as input from the user)
+        public static void Question10_PrimeNPalindrome()
+        {
+            
         }
 
 
-    }
+        }
 }

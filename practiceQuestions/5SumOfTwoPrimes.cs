@@ -6,42 +6,75 @@ namespace AssignmentSolutions
     {
          //Implement a program that finds whether a number can be expressed as the sum of two prime numbers. (e.g. 34 = 3+ 31) 
         static void Main(string[] args)
-        {
-            Console.Write("Enter a number: ");
-            if (!int.TryParse(Console.ReadLine(), out int n) || n < 2)
+         {
+            Console.WriteLine("Enter your number ");
+            int num;
+            bool b1 = Int32.TryParse(Console.ReadLine(), out num);
+
+            if (!b1 || num < 2)
             {
-                Console.WriteLine("Invalid input");
+                Console.WriteLine("Invalid input. Please enter a number greater than 1");
                 return;
             }
-
-            bool found = false;
-            for (int a = 2; a <= n / 2; a++)
+            //step 1 : primes upto num
+            int primeCount = 0;
+            for (int i = 2; i <= num; i++)
             {
-                int b = n - a;
-                if (IsPrime(a) && IsPrime(b))
+                bool isPrime = true;
+                for (int j = 2; j * j <= i; j++)
                 {
-                    Console.WriteLine($"{n} = {a} + {b}");
-                    found = true;
+                    if (i % j == 0)
+                    {
+                        isPrime = false;
+                        break;
+                    }
+                }
+                if (isPrime)
+                {
+                    primeCount++;
                 }
             }
-
+            // step2 primes in array 
+            int[] primes = new int[primeCount]; //list would reduce code
+            int index = 0;
+            for (int i = 2; i <= num; i++)
+            {
+                bool isPrime = true;
+                for (int j = 2; j * j <= i; j++)
+                {
+                    if (i % j == 0)
+                    {
+                        isPrime = false;
+                        break;
+                    }
+                }
+                if (isPrime)
+                {
+                    primes[index++] = i;
+                }
+            }
+            //step 3 ; prime pairs
+            bool found = false;
+            for (int i = 0; i < primes.Length; i++)
+            {
+                int p = primes[i];         // Take one prime number
+                int complement = num - p;  // Find what number would complete the sum to 'num'
+                for (int j = 0; j < primes.Length; j++)
+                {
+                    if (primes[j] == complement && p <= complement) //This inner loop checks if complement is also in the list of prime numbers.
+                    {
+                        Console.WriteLine($"{num} = {p} + {complement}");
+                        found = true;
+                        break;
+                        //If yes, then both p and complement are prime - valid pair
+                        // p <= complement avoids printing the same pair twice(e.g., 3 + 31 and 31 + 3).
+                    }
+                }
+            }
             if (!found)
             {
-                Console.WriteLine("No representation as sum of two primes found.");
+                Console.WriteLine($"{num} cannot be expressed as the sum of two prime numbers.");
             }
-        }
-
-        static bool IsPrime(int x)
-        {
-            if (x < 2) return false;
-            if (x == 2) return true;
-            if (x % 2 == 0) return false;
-            int limit = (int)Math.Sqrt(x);
-            for (int i = 3; i <= limit; i += 2)
-            {
-                if (x % i == 0) return false;
-            }
-            return true;
         }
     }
 }

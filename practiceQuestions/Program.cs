@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.NetworkInformation;
 
 
 namespace AssignmentSolutions
@@ -11,7 +12,18 @@ namespace AssignmentSolutions
             // questions.Question2_ArmstrongCheck();
             //  questions.Question3_2ndLargestNum();
             // questions.Question4_whichCharacter();
-            questions.Question5_NumAsSumofTwoPrimeNum();
+            // questions.Question5_NumAsSumofTwoPrimeNum();
+            // questions.Question6_LoginSystem();
+            // questions.Question7_GuessRandom();
+            //questions.Question8_PrimeNumber500();
+            questions.Question9_PerfectNumber();
+
+
+         
+
+
+
+
         }
     }
 }
