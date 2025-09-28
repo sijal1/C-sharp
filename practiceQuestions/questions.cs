@@ -1,8 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
+using System.Linq;
+using System.Net.NetworkInformation;
 using System.Security.Cryptography;
+using System.Security.Principal;
+using System.Threading;
 using System.Xml.Schema;
 
 
@@ -335,7 +340,7 @@ namespace AssignmentSolutions
             }
         }
         // Implement a program to check if a given number is a perfect number(sum of divisors = number, e.g., 28).
-        public static void Question9_PerfectNumber() 
+        public static void Question9_PerfectNumber()
         {
             Console.Write("Enter number to check for Perfect Number : ");
             int num;
@@ -345,7 +350,7 @@ namespace AssignmentSolutions
             {
                 for (int i = 1; i < num; i++)
                 {
-                    if (num % i == 0) 
+                    if (num % i == 0)
                     {
                         sum += i;
                     }
@@ -353,14 +358,14 @@ namespace AssignmentSolutions
 
                 if (sum == num)
                 {
-                    Console.WriteLine("{0} is an perfect number ",num);
+                    Console.WriteLine("{0} is an perfect number ", num);
                 }
                 else
                 {
-                    Console.WriteLine("{0} is an NOT a perfect number ",num);
+                    Console.WriteLine("{0} is an NOT a perfect number ", num);
                 }
             }
-            else 
+            else
             {
                 Console.WriteLine(" invalid input ; enter valid number  ");
             }
@@ -369,9 +374,115 @@ namespace AssignmentSolutions
         //  Write a program to print all numbers that are both palindromes and prime numbers within a range. (take range as input from the user)
         public static void Question10_PrimeNPalindrome()
         {
-            
+            int rangeStart;
+            int rangeEnd;
+            Console.WriteLine("Entr Starting rangefor prime numbers : ");
+            bool bStart = int.TryParse(Console.ReadLine(), out rangeStart);
+            if (bStart && rangeStart >= 2)
+            {
+                Console.WriteLine("Entr range End for prime numbers : ");
+                bool bEnd = int.TryParse(Console.ReadLine(), out rangeEnd);
+                List<int> primeList = new List<int>();
+
+                if (bEnd && rangeEnd > rangeStart)
+                {
+                    for (int i = rangeStart; i <= rangeEnd; i++)
+                    {
+                        if (IsPrime(i))
+                        {
+                            primeList.Add(i);
+                        }
+                    }
+                    foreach (int prime in primeList)
+                    {
+                        if (isPalindrome(prime))
+                        {
+                            Console.WriteLine(prime + " ");
+                        }
+                    }
+
+                }
+                else
+                {
+                    Console.WriteLine("Enter valid ending  range");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Enter valid starting range");
+            }
+            bool isPalindrome(int number)
+            {
+                string str = number.ToString();
+                string strRev = "";
+                foreach (char i in str)
+                {
+                    strRev = i + strRev;
+                }
+                return str == strRev;
+            }
+            bool IsPrime(int number)
+            {
+                if (number < 2) return false;
+                for (int i = 2; i <= Math.Sqrt(number); i++)
+                {
+                    if (number % i == 0)
+                        return false;
+                }
+                return true;
+            }
+
+
+            //or
+            //
+            //string str = number.ToString();
+            //string strRev = new string(str.Reverse().ToArray());
+            //return str == strRev;
+
+
+            //if (str == strRev) 
+            //{
+            //    return true;
+            //}
+            //return false;
+
+        }
+        //Write a program to find the frequency of each character in a string using loops. (take string as input from the user) 
+        public static void Question11_characterFrequency()
+        {
+            Console.WriteLine("Enter your string to count character frequency : ");
+            string UserString = Console.ReadLine();
+
+            Dictionary<char, int> FrequencyDict = new Dictionary<char, int>();
+
+            foreach (char c in UserString) //UserString.ToLower() to convert all into lowercase 
+            {
+                //if (char.IsLetterOrDigit(c)) {} - to ignore space,digits 
+                if (FrequencyDict.ContainsKey(c))
+                {
+                    FrequencyDict[c]++;
+                }
+                else
+                {
+                    FrequencyDict.Add(c, 1);
+                    // FrequencyDict[c] = 1;
+                }
+            }
+            foreach (var CF in FrequencyDict)
+            {
+                Console.WriteLine($"Character '{CF.Key}' occurs {CF.Value} times");
+            }
+        }
+        //Write a program to generate and print all permutations of a string (without using built-in permutation functions). 
+        public static void Question12_PermutationString()
+        {
+           
         }
 
 
+        public static void Question13_BankAcc_EncapInherPoly() 
+        {
         }
+
+    }
 }
